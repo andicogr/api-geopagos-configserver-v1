@@ -1,0 +1,20 @@
+
+server:
+  port: 8888
+  servlet:
+    context-path: /config-server
+
+
+spring:
+  application:
+    name: config-server
+  # Spring Cloud Config Server Repository
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/andicogr/geopagos-config
+  # Spring properties in case you use different profiles
+  profiles:
+    active: dev
+
