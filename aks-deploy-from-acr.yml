@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: geopagos-configserver-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: geopagos-configserver-app
+  template:
+    metadata:
+      labels:
+        app: geopagos-configserver-app
+    spec:
+      containers:
+        - name: geopagos-configserver-app
+          image: myacrgeopagos.azurecr.io/andicogr/springboot-app:#{Build.BuildId}#
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8888
+# service type loadbalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: geopagos-configserver-app
+    k8s-app: geopagos-configserver-app
+  name: geopagos-configserver-app
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8888
+  type: LoadBalancer
+  selector:
+    app: geopagos-configserver-app
